@@ -14,16 +14,265 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      departments: {
+        Row: {
+          code: string
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      letter_approvals: {
+        Row: {
+          approval_type: string
+          approved_at: string | null
+          approver_id: string
+          comments: string | null
+          created_at: string | null
+          id: string
+          letter_id: string
+          status: string
+        }
+        Insert: {
+          approval_type: string
+          approved_at?: string | null
+          approver_id: string
+          comments?: string | null
+          created_at?: string | null
+          id?: string
+          letter_id: string
+          status: string
+        }
+        Update: {
+          approval_type?: string
+          approved_at?: string | null
+          approver_id?: string
+          comments?: string | null
+          created_at?: string | null
+          id?: string
+          letter_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "letter_approvals_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "letter_approvals_letter_id_fkey"
+            columns: ["letter_id"]
+            isOneToOne: false
+            referencedRelation: "letters"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      letter_tracking: {
+        Row: {
+          action: string
+          comments: string | null
+          created_at: string | null
+          id: string
+          letter_id: string
+          performed_by: string
+        }
+        Insert: {
+          action: string
+          comments?: string | null
+          created_at?: string | null
+          id?: string
+          letter_id: string
+          performed_by: string
+        }
+        Update: {
+          action?: string
+          comments?: string | null
+          created_at?: string | null
+          id?: string
+          letter_id?: string
+          performed_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "letter_tracking_letter_id_fkey"
+            columns: ["letter_id"]
+            isOneToOne: false
+            referencedRelation: "letters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "letter_tracking_performed_by_fkey"
+            columns: ["performed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      letters: {
+        Row: {
+          attachments: Json | null
+          content: string
+          created_at: string | null
+          id: string
+          priority: string | null
+          recipient_department_id: string | null
+          reference_number: string
+          requires_minister_approval: boolean | null
+          sender_department_id: string | null
+          sender_id: string
+          status: Database["public"]["Enums"]["letter_status"] | null
+          subject: string
+          updated_at: string | null
+        }
+        Insert: {
+          attachments?: Json | null
+          content: string
+          created_at?: string | null
+          id?: string
+          priority?: string | null
+          recipient_department_id?: string | null
+          reference_number: string
+          requires_minister_approval?: boolean | null
+          sender_department_id?: string | null
+          sender_id: string
+          status?: Database["public"]["Enums"]["letter_status"] | null
+          subject: string
+          updated_at?: string | null
+        }
+        Update: {
+          attachments?: Json | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          priority?: string | null
+          recipient_department_id?: string | null
+          reference_number?: string
+          requires_minister_approval?: boolean | null
+          sender_department_id?: string | null
+          sender_id?: string
+          status?: Database["public"]["Enums"]["letter_status"] | null
+          subject?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "letters_recipient_department_id_fkey"
+            columns: ["recipient_department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "letters_sender_department_id_fkey"
+            columns: ["sender_department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "letters_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          department_id: string | null
+          email: string
+          full_name: string
+          id: string
+          is_active: boolean | null
+          phone: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          department_id?: string | null
+          email: string
+          full_name: string
+          id: string
+          is_active?: boolean | null
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          department_id?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          is_active?: boolean | null
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_reference_number: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      get_current_user_department: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
     }
     Enums: {
-      [_ in never]: never
+      letter_status:
+        | "draft"
+        | "submitted"
+        | "pending_admin_approval"
+        | "pending_minister_approval"
+        | "approved"
+        | "rejected"
+        | "delivered"
+      user_role: "minister" | "record_office" | "department_user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +399,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      letter_status: [
+        "draft",
+        "submitted",
+        "pending_admin_approval",
+        "pending_minister_approval",
+        "approved",
+        "rejected",
+        "delivered",
+      ],
+      user_role: ["minister", "record_office", "department_user"],
+    },
   },
 } as const
