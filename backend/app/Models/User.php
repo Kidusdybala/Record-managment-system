@@ -25,6 +25,7 @@ class User extends Authenticatable
         'password',
         'role',
         'department_id',
+        'status',
     ];
 
     /**
@@ -96,5 +97,37 @@ class User extends Authenticatable
     public function isDepartment(): bool
     {
         return $this->role === 'department';
+    }
+
+    /**
+     * Check if user is active.
+     */
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    /**
+     * Check if user is suspended.
+     */
+    public function isSuspended(): bool
+    {
+        return $this->status === 'suspended';
+    }
+
+    /**
+     * Suspend the user.
+     */
+    public function suspend(): void
+    {
+        $this->update(['status' => 'suspended']);
+    }
+
+    /**
+     * Activate the user.
+     */
+    public function activate(): void
+    {
+        $this->update(['status' => 'active']);
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\LetterController;
+use App\Http\Controllers\UserController;
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
@@ -14,12 +15,17 @@ Route::prefix('auth')->group(function () {
 Route::middleware('jwt')->group(function () {
     Route::get('departments', [DepartmentController::class, 'index']);
 
+    // User management (Record office only)
+    Route::apiResource('users', UserController::class)->middleware('role:record_office');
+    Route::patch('users/{id}/suspend', [UserController::class, 'suspend'])->middleware('role:record_office');
+    Route::patch('users/{id}/activate', [UserController::class, 'activate'])->middleware('role:record_office');
+
     Route::get('letters/inbox', [LetterController::class, 'inbox']);
     Route::get('letters/sent', [LetterController::class, 'sent']);
 
     // Department users and ministers can create letters (to be reviewed by record office first)
     Route::post('letters', [LetterController::class, 'store'])->middleware('role:department,minister');
-    
+
     // Download document
     Route::get('letters/{id}/document', [LetterController::class, 'downloadDocument'])->middleware('jwt');
 

@@ -58,7 +58,7 @@ class LetterController extends Controller
             'subject' => 'required|string|max:255',
             'description' => 'nullable|string',
             'document' => 'required|file|mimes:pdf,doc,docx|max:10240', // 10MB max
-            'requires_minister' => 'boolean',
+            'requires_minister' => 'nullable|string|in:true,false,1,0',
         ]);
 
         $role = $request->attributes->get('auth_role');
@@ -74,13 +74,17 @@ class LetterController extends Controller
         $documentName = $document->getClientOriginalName();
         $documentType = $document->getClientMimeType();
         $documentSize = $document->getSize();
-        
+
         // Store the file in storage/app/documents
         $documentPath = $document->store('documents', 'public');
 
+        // Convert requires_minister string to boolean
+        $requiresMinister = $request->input('requires_minister');
+        $requiresMinisterBool = $requiresMinister === 'true' || $requiresMinister === '1';
+
         $letter = Letter::create([
             'subject' => $request->string('subject'),
-            'body' => $request->string('description', ''), // Use description instead of body
+            'body' => '', // Empty body for document uploads
             'document_path' => $documentPath,
             'document_name' => $documentName,
             'document_type' => $documentType,
@@ -88,7 +92,7 @@ class LetterController extends Controller
             'description' => $request->string('description', ''),
             'from_department_id' => $fromDepartmentId,
             'to_department_id' => null, // assigned after admin review/forward
-            'requires_minister' => (bool) $request->input('requires_minister', false),
+            'requires_minister' => $requiresMinisterBool,
             'status' => 'pending_review',
             'created_by_user_id' => (int) $userId,
         ]);
