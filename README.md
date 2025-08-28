@@ -313,7 +313,7 @@ services:
       - MYSQL_ROOT_PASSWORD=secret
 ```
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues & Solutions
 
@@ -339,7 +339,7 @@ php artisan route:clear
 php artisan migrate:fresh --seed
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 ### Development Workflow
 1. **Fork** the repository
@@ -366,13 +366,9 @@ php artisan migrate:fresh --seed
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Support
+##  Support
 
 For support and questions:
 - **Issues**: GitHub Issues
 - **Discussions**: GitHub Discussions
 - **Email**: Contact the development team
-
----
-
-**Built with ❤️ for efficient government operations**
