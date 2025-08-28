@@ -1,155 +1,378 @@
-# Innovation Scribe - Record Management System
+# Ministry of Innovation and Technology - Record Management System (RMS)
 
-A unified frontend-backend system for managing government records and correspondence.
+A comprehensive digital solution for government record management, correspondence tracking, and inter-departmental communication built with modern web technologies.
 
-## System Architecture
+## 📋 Overview
 
-This system consists of:
-- **Frontend**: React + TypeScript application (`innovation-dispatch/`)
-- **Backend**: Laravel 12 API (`backend/`)
+The Record Management System (RMS) streamlines government operations by providing a secure, efficient platform for:
+- **Document Management**: Upload, store, and track official documents and letters
+- **Workflow Automation**: Automated routing and approval processes
+- **User Management**: Role-based access control with comprehensive user administration
+- **Real-time Tracking**: Monitor document status and approval progress
+- **Inter-departmental Communication**: Seamless collaboration between government departments
+
+## 🏗️ System Architecture
+
+This enterprise-grade system consists of:
+
+- **Frontend**: React 18 + TypeScript + Tailwind CSS (`frontend/`)
+- **Backend**: Laravel 12 API with PHP 8.2+ (`backend/`)
 - **Database**: SQLite (development) / MySQL/PostgreSQL (production)
+- **Authentication**: JWT with HTTP-only cookies for security
+- **File Storage**: Secure document upload and storage system
 
-## Demo Accounts
+## 🎯 Key Features
 
-The system now uses **unified credentials** that work with both frontend and backend:
+### 🔐 Advanced User Management
+- **Role-Based Access Control**: Minister, Record Office (Admin), Department User roles
+- **Account Lifecycle Management**: Create, suspend, activate, and manage user accounts
+- **Secure Authentication**: JWT-based authentication with cookie security
+- **User Administration**: Complete CRUD operations for system administrators
 
-| Role | Email | Password | Description |
-|------|-------|----------|-------------|
-| Minister | `minister@ministry.gov` | `minister123` | Full system access, final approval authority |
-| Record Office (Admin) | `admin@ministry.gov` | `admin123` | Administrative access, record management |
-| Department User | `dit@ministry.gov` | `dept123` | Department-specific access, letter creation |
+### 📄 Document & Correspondence Management
+- **Multi-format Support**: PDF, DOC, DOCX document uploads
+- **Flexible Routing**: Send to specific departments or admin for review
+- **Approval Workflows**: Multi-level approval process with minister oversight
+- **Document Tracking**: Real-time status monitoring and audit trails
 
-## Setup Instructions
+### 🎨 Modern User Interface
+- **Responsive Design**: Optimized for desktop and mobile devices
+- **Component-Based Architecture**: Reusable, maintainable UI components
+- **Real-time Updates**: Dynamic dashboard with live statistics
+- **Intuitive Navigation**: Role-specific dashboards and workflows
+
+### 🔒 Enterprise Security
+- **JWT Authentication**: Secure token-based authentication
+- **Role-Based Permissions**: Granular access control
+- **Input Validation**: Comprehensive server-side validation
+- **CORS Protection**: Configured for secure cross-origin requests
+- **File Upload Security**: Type and size validation for documents
+
+## 👥 User Roles & Permissions
+
+| Role | Permissions | Description |
+|------|-------------|-------------|
+| **Minister** | Full system access, final approval authority, document review | Government minister with ultimate decision-making power |
+| **Record Office (Admin)** | User management, document routing, system administration | Administrative staff managing records and user accounts |
+| **Department User** | Document creation, department-specific access | Department staff creating and managing their correspondence |
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- PHP 8.2+
-- Node.js 18+
-- Composer
-- npm/yarn
+- PHP 8.2 or higher
+- Node.js 18+ and npm
+- Composer (PHP dependency manager)
+- Git
 
-### Backend Setup
+### Installation & Setup
+
 ```bash
+# Clone the repository
+git clone <repository-url>
+cd rms
+
+# Backend Setup
 cd backend
-
-# Install PHP dependencies
 composer install
-
-# Create environment file (if not exists)
 cp .env.example .env
-
-# Generate application key
 php artisan key:generate
-
-# Set up database
 php artisan migrate:fresh --seed
 
-# Start backend server
-php artisan serve --host=0.0.0.0 --port=8000
-```
-
-### Frontend Setup
-```bash
-cd innovation-dispatch
-
-# Install Node.js dependencies
+# Frontend Setup
+cd ../frontend
 npm install
 
-# Start frontend development server
+# Start Development Servers
+# Terminal 1 - Backend
+cd backend
+php artisan serve --host=127.0.0.1 --port=8000
+
+# Terminal 2 - Frontend
+cd frontend
 npm run dev
 ```
 
-### Quick Start (Windows)
-```powershell
-# Run the development startup script
-.\start-dev.ps1
+### Demo Accounts
+
+| Role | Email | Password | Access Level |
+|------|-------|----------|--------------|
+| Minister | `minister@ministry.gov` | `minister123` | Full System Access |
+| Record Office (Admin) | `admin@ministry.gov` | `admin123` | Administrative Access |
+| Department User | `dit@ministry.gov` | `dept123` | Department Access |
+
+## 📊 System Workflow
+
+### Document Creation & Routing
+1. **Department User** creates a letter/document
+2. **Department User** chooses recipient (specific department or admin)
+3. **Record Office** reviews and routes the document
+4. **Minister** provides final approval (if required)
+5. **Document** is delivered to target department
+
+### User Management Workflow
+1. **Record Office** creates user accounts
+2. **Record Office** assigns appropriate roles and departments
+3. **Record Office** can suspend/activate accounts as needed
+4. **System** maintains audit trail of all user actions
+
+## 🔧 Technical Implementation
+
+### Frontend Architecture
+```
+frontend/src/
+├── components/           # Reusable UI components
+│   ├── dashboard/       # Dashboard-specific components
+│   ├── letters/         # Letter management components
+│   ├── users/          # User management components
+│   └── forms/          # Form components
+├── pages/              # Main application pages
+├── contexts/           # React context providers
+├── hooks/              # Custom React hooks
+└── lib/                # API clients and utilities
 ```
 
-This script will:
-1. Set up the database if needed
-2. Start the Laravel backend on http://localhost:8000
-3. Start the React frontend on http://localhost:5173
-4. Display the demo account credentials
+### Backend Architecture
+```
+backend/
+├── app/
+│   ├── Http/Controllers/    # API controllers
+│   ├── Models/             # Eloquent models
+│   ├── Services/           # Business logic services
+│   └── Middleware/         # Custom middleware
+├── database/
+│   ├── migrations/         # Database schema
+│   └── seeders/           # Demo data
+├── routes/                # API routes
+└── config/               # Configuration files
+```
 
-## How It Works
+### Key Technologies
+- **Frontend**: React 18, TypeScript, Tailwind CSS, React Router
+- **Backend**: Laravel 12, PHP 8.2+, MySQL/PostgreSQL
+- **Authentication**: JWT with HTTP-only cookies
+- **File Storage**: Laravel's filesystem with secure uploads
+- **Validation**: Laravel's robust validation system
 
-### Authentication Flow
-1. **Frontend** sends login request to `/api/auth/login`
-2. **Backend** validates credentials against database
-3. **Backend** returns JWT token in HTTP-only cookie
-4. **Frontend** stores user data in localStorage
-5. **Frontend** includes credentials in subsequent API requests
+## 📡 API Documentation
 
-### Data Flow
-- **Frontend** makes API calls to backend endpoints
-- **Backend** processes requests using JWT authentication
-- **Database** stores all user data, letters, and department information
-- **Real-time** updates through API responses
+### Authentication Endpoints
+```http
+POST /api/auth/login
+Content-Type: application/json
 
-## API Endpoints
+{
+  "email": "user@ministry.gov",
+  "password": "password123"
+}
+```
 
-### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout  
-- `GET /api/auth/me` - Get current user info
+```http
+POST /api/auth/logout
+GET  /api/auth/me
+```
 
-### Protected Routes (require JWT)
-- `GET /api/departments` - List departments
-- `GET /api/letters/inbox` - Get inbox letters
-- `GET /api/letters/sent` - Get sent letters
-- `POST /api/letters` - Create new letter (department users)
-- `PATCH /api/letters/{id}/admin-review` - Admin review (record office)
-- `PATCH /api/letters/{id}/minister-decision` - Minister decision
-- `PATCH /api/letters/{id}/forward` - Forward letter (record office)
+### Core API Endpoints
 
-## Security Features
+#### Departments
+```http
+GET /api/departments  # List all departments
+```
 
-- **JWT Authentication** with HTTP-only cookies
-- **Role-based Access Control** (minister, record_office, department)
-- **Password Hashing** using Laravel's Hash facade
-- **CORS Protection** configured for development
-- **Input Validation** on all API endpoints
+#### Letters Management
+```http
+GET  /api/letters/inbox           # Get user's inbox
+GET  /api/letters/sent            # Get user's sent letters
+POST /api/letters                 # Create new letter/document
+GET  /api/letters/{id}/document   # Download document
+```
 
-## Development Notes
+#### Administrative Actions
+```http
+PATCH /api/letters/{id}/admin-review     # Admin review & routing
+PATCH /api/letters/{id}/minister-decision # Minister approval/rejection
+PATCH /api/letters/{id}/forward          # Forward to department
+```
 
-- **CORS** is configured to allow `localhost:5173` (frontend) to communicate with `localhost:8000` (backend)
-- **Database seeding** creates demo users with the credentials listed above
-- **JWT tokens** are stored in HTTP-only cookies for security
-- **Role mapping** converts backend roles to frontend roles automatically
+#### User Management (Admin Only)
+```http
+GET    /api/users              # List all users
+POST   /api/users              # Create new user
+GET    /api/users/{id}         # Get user details
+PUT    /api/users/{id}         # Update user
+DELETE /api/users/{id}         # Delete user (admin only)
+PATCH  /api/users/{id}/suspend # Suspend user account
+PATCH  /api/users/{id}/activate # Activate user account
+```
 
-## Troubleshooting
+## 🚀 Recent Improvements
 
-### Common Issues
+### ✅ Major Refactoring (Latest Update)
+- **Component Architecture**: Broke down large dashboard files into reusable components
+- **AdminDashboard**: Reduced from ~896 lines to 469 lines (47% reduction)
+- **Code Reusability**: Created shared components for stats, letters, and forms
+- **Maintainability**: Improved code organization and separation of concerns
 
-1. **CORS Errors**: Ensure backend is running on port 8000 and frontend on 5173
-2. **Database Errors**: Run `php artisan migrate:fresh --seed` in backend directory
-3. **Authentication Failures**: Check that demo accounts exist in database
-4. **Port Conflicts**: Verify ports 8000 and 5173 are available
+### ✅ User Management System
+- **Complete CRUD**: Create, read, update, delete user accounts
+- **Account Status**: Suspend/activate users instead of permanent deletion
+- **Role Management**: Assign and modify user roles and departments
+- **Security**: Proper authorization and validation
 
-### Reset System
+### ✅ Enhanced Document Management
+- **Flexible Routing**: Send to admin or specific departments
+- **File Upload**: Fixed 422 errors with proper multipart handling
+- **Document Security**: Type validation and size limits
+- **Audit Trail**: Complete tracking of document lifecycle
+
+### ✅ Authentication & Security
+- **JWT with Cookies**: Secure token storage in HTTP-only cookies
+- **Fallback Authentication**: Cookie-based auth when localStorage fails
+- **Role-Based Access**: Granular permissions for different user types
+- **Input Validation**: Comprehensive server-side validation
+
+### ✅ User Experience
+- **Responsive Design**: Mobile-friendly interface
+- **Real-time Updates**: Live dashboard statistics
+- **Intuitive Workflows**: Streamlined document approval process
+- **Error Handling**: Comprehensive error messages and validation
+
+## 🛡️ Security & Compliance
+
+### Authentication & Authorization
+- **JWT with HTTP-only Cookies**: Secure token storage preventing XSS attacks
+- **Role-Based Access Control**: Granular permissions for different user types
+- **Session Management**: Secure logout with token invalidation
+- **Password Security**: Bcrypt hashing with Laravel's Hash facade
+
+### Data Protection
+- **Input Sanitization**: Comprehensive server-side validation
+- **File Upload Security**: Type, size, and content validation
+- **CORS Configuration**: Properly configured for secure cross-origin requests
+- **Audit Trail**: Complete logging of user actions and document changes
+
+### Infrastructure Security
+- **Environment Variables**: Sensitive data stored securely
+- **Database Security**: Parameterized queries preventing SQL injection
+- **File Storage**: Secure document storage with access controls
+
+## 🔧 Development & Deployment
+
+### Development Environment
 ```bash
-# Backend
-cd backend
+# Environment Setup
+cp backend/.env.example backend/.env
+php artisan key:generate
+
+# Database Setup
 php artisan migrate:fresh --seed
 
-# Frontend
-cd innovation-dispatch
-npm run dev
+# Development Servers
+php artisan serve --host=127.0.0.1 --port=8000  # Backend
+npm run dev                                    # Frontend
 ```
 
-## Production Deployment
+### Production Deployment
 
-For production:
-1. Update CORS configuration in `backend/config/cors.php`
-2. Set proper environment variables
-3. Use production database (MySQL/PostgreSQL)
-4. Configure proper JWT secrets
-5. Set up HTTPS
-6. Update API_BASE_URL in frontend AuthContext
+#### Backend Deployment
+```bash
+# Environment Configuration
+cp .env.example .env
+# Configure production database, mail, etc.
 
-## Contributing
+# Build and Deploy
+composer install --optimize-autoloader --no-dev
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
 
-1. Ensure frontend and backend work together
-2. Test authentication flow end-to-end
-3. Verify role-based permissions
-4. Update demo accounts if needed
-5. Test CORS configuration
+#### Frontend Deployment
+```bash
+# Build for production
+npm run build
+
+# Deploy dist/ folder to web server
+# Configure nginx/apache to serve static files
+```
+
+#### Docker Deployment (Optional)
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=rms
+      - MYSQL_ROOT_PASSWORD=secret
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues & Solutions
+
+| Issue | Symptom | Solution |
+|-------|---------|----------|
+| **CORS Errors** | Frontend can't connect to backend | Check ports (8000/5173) and CORS config |
+| **Auth Failures** | "Invalid token" errors | Clear localStorage, re-login, check JWT secret |
+| **File Upload** | 422 errors on document upload | Check file size/type limits, multipart config |
+| **Database** | Migration/connection errors | Run `php artisan migrate:fresh --seed` |
+| **Port Conflicts** | Services won't start | Kill processes on ports 8000/5173 |
+
+### Debug Commands
+```bash
+# Check Laravel logs
+tail -f backend/storage/logs/laravel.log
+
+# Clear all caches
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+
+# Reset database
+php artisan migrate:fresh --seed
+```
+
+## 🤝 Contributing
+
+### Development Workflow
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### Code Standards
+- **PHP**: Follow PSR-12 coding standards
+- **JavaScript/TypeScript**: Use ESLint configuration
+- **Commits**: Use conventional commit format
+- **Testing**: Write tests for new features
+
+### Testing Checklist
+- [ ] Authentication flow works end-to-end
+- [ ] Role-based permissions are enforced
+- [ ] File uploads work correctly
+- [ ] User management functions properly
+- [ ] Responsive design on mobile devices
+- [ ] CORS configuration is correct
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+For support and questions:
+- **Issues**: GitHub Issues
+- **Discussions**: GitHub Discussions
+- **Email**: Contact the development team
+
+---
+
+**Built with ❤️ for efficient government operations**
